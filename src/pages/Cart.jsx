@@ -9,7 +9,7 @@ const Cart = () => {
       <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-900 text-black dark:text-white">
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-4">Cart Empty</h2>
-          <p>No booking data available.</p>
+          <p>Currently not connecting to assets.js or selectseat.jsx for booking data</p>
         </div>
       </div>
     );

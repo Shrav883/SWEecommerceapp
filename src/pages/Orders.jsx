@@ -36,8 +36,8 @@ const Orders = () => {
   }
 
   return (
-    <div className="container mx-auto mt-8 p-4 bg-gray-700 shadow-md rounded-md">
-      <h2 className="text-2xl text-slate-100 font-semibold mb-6">Order History</h2>
+    <div className="container mx-auto mt-8 p-4 bg-gray-700 shadow-md rounded-xl">
+      <h2 className="text-2xl text-slate-100 text-font-semibold mb-6">Order History (not connected to backend)</h2>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
@@ -58,7 +58,7 @@ const Orders = () => {
                   <td className="py-2 px-4 border-b">{new Date(order.orderDate).toLocaleDateString()}</td>
                   <td className="py-2 px-4 border-b">${order.totalAmount.toFixed(2)}</td>
                   <td className="py-2 px-4 border-b">{order.status}</td>
-                  <td className="py-2 px-4 border-b">
+                  <td className="py-2 px-4 border-b rounded-lg bg-red-600 hover:bg-red-700">
                     {expandedOrderId === order.orderId ? 'Hide Details' : 'View Details'}
                   </td>
                 </tr>
