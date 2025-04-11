@@ -10,6 +10,7 @@ import SelectSeat from './pages/selectseat'
 import Contact from './pages/contact'
 import Navbar from './components/Navbar'
 import MyProfile from './pages/MyProfile'
+import { products } from './assets/assets'
 
 const App = () => {
   return (
@@ -20,12 +21,12 @@ const App = () => {
         <Route path='/cart' element={<Cart/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/movie' element={<Movie/>} />
-        <Route path='/movie/:id' element = {<Movie/>} />
         <Route path='/orders' element={<Orders/>} />
         <Route path='/selectseat/:id' element={<SelectSeat/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/myprofile' element={<MyProfile/>} />
         <Route path='/about' element={<About />} />
+    
       </Routes>
       <footer className="text-center mt-12 py-4 border-t">
         <p>E-Commerce Project :: Shravani Kardekar</p>

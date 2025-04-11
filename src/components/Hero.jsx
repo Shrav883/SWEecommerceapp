@@ -2,7 +2,7 @@ import React from 'react'
 import { assets } from '../assets/assets'
 
 const Hero = () => {
-  return (
+return (
     <div className='flex flex-col sm:flex-row border-6 border-red-500 rounded-lg'>
         {/*Hero Left Side*/}
         <div className='w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0'>

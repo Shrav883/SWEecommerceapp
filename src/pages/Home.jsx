@@ -75,7 +75,7 @@ const Home = () => {
               <p className="mt-1 text-sm font-medium text-red-500">
                 ${movie.ticketprice}
               </p>
-              <Link to={'/selectseat/${movie.id}'}>
+              <Link to={`/selectseat/${movie?.id}`}>
               <button className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-1 rounded">
                 Book Now
               </button>
