@@ -40,32 +40,75 @@ const About = () => {
 
         {/* Front-End Development (Project #1) Section */}
         <section className="bg-white shadow-md rounded-lg p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Front-End Development (Project #1)
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Implemented features
           </h2>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">Key Concepts</h3>
-          <ul className="list-disc list-inside text-gray-600 mb-4">
-            <li>
-              Component-Based Architecture: Learn how modern UI is constructed using reusable
-              components in React.
-            </li>
-            <li>
-              State Management: Implement state handling techniques for dynamic user interfaces.
-            </li>
-            <li>
-              Testing Fundamentals: Apply unit testing principles to ensure code quality and
-              functionality.
-            </li>
-          </ul>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">Project Requirements</h3>
-          <ul className="list-disc list-inside text-gray-600">
-            <li>
-              Component Structure: Implement a minimum of 8 reusable React components.
-            </li>
-            <li>Routing and Navigation: Implement React Router with specified routes.</li>
-            <li>State Management: Use appropriate state management techniques.</li>
-            {/* ... other requirements ... */}
-          </ul>
+
+<ul>
+  <li>
+    <strong>Movie Collection Display:</strong>
+    <p>Lists movies with their names, release dates, and directors.</p>
+  </li>
+  <li>
+    <strong>Search Functionality:</strong>
+    <p>Allows users to search for movies by name or director.</p>
+  </li>
+  <li>
+    <strong>Detailed Movie Information:</strong>
+    <p>Provides a dropdown option for each movie to display comprehensive details, including:</p>
+    <ul>
+      <li>Movie ID</li>
+      <li>Description</li>
+      <li>Release Date</li>
+      <li>Director</li>
+      <li>Main Actor</li>
+      <li>Category</li>
+      <li>Ticket Price</li>
+      <li>Best Seller status</li>
+      <li>Movie Image.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Booking Simulation:</strong>
+    <p>Includes a "Book Now" button to simulate the ticket booking process.</p>
+  </li>
+  <li>
+    <strong>Cart Management:</strong>
+    <p>Allows users to add movies to a cart.</p>
+  </li>
+  <li>
+    <strong>Order Management:</strong>
+    <p>Allows users to view and manage orders.</p>
+  </li>
+  <li>
+    <strong>User Profile Management:</strong>
+    <p>Allows users to manage their profiles.</p>
+  </li>
+  <li>
+    <strong>Seat Selection:</strong>
+    <p>Allows users to select seats for a movie.</p>
+  </li>
+  <li>
+    <strong>Navigation Bar:</strong>
+    <p>Provides a navigation bar for easy access to different pages.</p>
+  </li>
+  <li>
+    <strong>Hero Section:</strong>
+    <p>Includes a hero section on the home page.</p>
+  </li>
+  <li>
+    <strong>About Us Page:</strong>
+    <p>Provides information about the application.</p>
+  </li>
+  <li>
+    <strong>Contact Us Page:</strong>
+    <p>Provides a contact form for users to reach out.</p>
+  </li>
+  <li>
+    <strong>Login Page:</strong>
+    <p>Allows users to log in.</p>
+  </li>
+</ul>
         </section>
 
         {/* Add more sections as needed, (ADD REFERENCES!!! ) following the same structure */}

@@ -1,5 +1,45 @@
 # SWEecommerceapp
 
+"Showtime" is a web-based application designed to streamline the process of purchasing movie tickets online.
+
+## Implemented Features
+
+* **Movie Collection Display:**
+    * Lists movies with their names, release dates, and directors.
+* **Search Functionality:**
+    * Allows users to search for movies by name or director.
+* **Detailed Movie Information:**
+    * Provides a dropdown option for each movie to display comprehensive details, including:
+        * Movie ID
+        * Description
+        * Release Date
+        * Director
+        * Main Actor
+        * Category
+        * Ticket Price
+        * Best Seller status
+        * Movie Image.
+* **Booking Simulation:**
+    * Includes a "Book Now" button to simulate the ticket booking process.
+* **Cart Management:**
+    * Allows users to add movies to a cart.
+* **Order Management:**
+    * Allows users to view and manage orders.
+* **User Profile Management:**
+    * Allows users to manage their profiles.
+* **Seat Selection:**
+    * Allows users to select seats for a movie.
+* **Navigation Bar:**
+    * Provides a navigation bar for easy access to different pages.
+* **Hero Section:**
+    * Includes a hero section on the home page.
+* **About Us Page:**
+    * Provides information about the application.
+* **Contact Us Page:**
+    * Provides a contact form for users to reach out.
+* **Login Page:**
+    * Allows users to log in or create an account.
+
 ## Setup Instructions
 
 1.  **Clone the repository:**
@@ -18,70 +58,74 @@
 
 6.  **Run**
         npm run dev
-
-    
-## Description of Implemented Features
-
-* **User Authentication:**
-    * Users can register, log in, and log out.
-* **Product Catalog:**
-    * Browse a list of products.
-    * View product details (name, description, price, images).
-    * Product search and filtering.
-* **Shopping Cart:**
-    * Add products to the cart.
-    * View and modify the cart contents.
-    * Select from child or adult prices.
-    * Calculate the total price.
-* **Checkout Process:**
-    * Secure checkout process.
-    * Order confirmation.
-* **User Profile:**
-    * View order history.
-    * Manage profile information.
       
+## Project Structure
+SWEecommerceapp/
+├── public/
+│   ├── favicon.ico
+│   └── ... (other static assets)
+├── src/
+│   ├── assets/
+│   │   ├── assets.js       (Movie data)
+│   │   └── mockOrders.js    (Mock order data)
+│   ├── components/
+│   │   ├── Hero.jsx        (Hero section component)
+│   │   ├── Navbar.jsx      (Navigation bar component)
+│   ├── pages/
+│   │   ├── About.jsx       (About page component)
+│   │   ├── Cart.jsx        (Cart page component)
+│   │   ├── Contact.jsx     (Contact page component)
+│   │   ├── Home.jsx        (Home page component)
+│   │   ├── Login.jsx       (Login page component)
+│   │   ├── Movie.jsx       (Movie list component)
+│   │   ├── MyProfile.jsx   (User profile page component)
+│   │   ├── Orders.jsx      (Orders page component)
+│   │   ├── Selectseat.jsx  (Seat selection page component)
+│   ├── App.jsx            (Main application component)
+│   ├── main.jsx           (Entry point of the application)
+│   ├── index.css          (Global styles)
+│   └── vite-env.d.ts      (TypeScript environment declarations for Vite)
+├── index.html           (Vite's entry HTML file)
+├── package.json
+├── package-lock.json
+├── README.md
+├── .gitignore
+├── vite.config.js       (Vite configuration)
+
 ## Testing Instructions
 
-4.  **Manual Testing:**
-    * Manually test the application by following these steps:
-        * **User Authentication:**
-            * Register a new user account.
-            * Log in with the new account.
-            * Log out.
-        * **Product Catalog:**
-            * Browse the product catalog.
-            * View product details.
-            * Use the search and filter features.
-        * **Shopping Cart:**
-            * Add products to the cart.
-            * View and modify the cart.
-            * Verify the total price calculation.
-        * **Checkout Process:**
-            * Proceed to checkout.
-            * Confirm the order.
-        * **User Profile:**
-            * View order history.
-            * Manage profile information.
+This project does not include unit or integration tests at this time. However, you can manually test the application by:
+
+1.  Starting the development server (`npm run dev`).
+2.  Navigating to the application in your browser.
+3.  Using the search bar to find movies.
+4.  Clicking the "View Details" button to expand movie information.
+5.  Verifying that all movie details are displayed correctly.
+6.  Clicking the "Book Now" button to simulate a booking.
+7.  Adding movies to the cart.
+8.  Navigating to the cart page and verifying the cart items.
+9.  Placing an order and verifying the order details.
+10. Navigating to the user profile page and verifying the user information.
+11. Selecting seats for a movie.
+12. Navigating to the about and contact pages.
+13. Logging in and verifying the login functionality.
        
-## Third-Party Libraries
+## Third-Party Libraries Used
 
 * **React:** (If a frontend application)
     * A JavaScript library for building user interfaces.  Used for creating a dynamic and interactive frontend.
-* **Node.js and Express:** (If a backend application)
-    * **Node.js:** A JavaScript runtime built on Chrome's V8 JavaScript engine.  Used for building the server-side logic.
-    * **Express:** A minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.  Used for creating the API endpoints and handling server-side logic.
-* **Database (e.g., PostgreSQL, MySQL, MongoDB):**
-    * Used for storing application data, such as user information, product details, and orders.
-* **TypeORM/Sequelize/Mongoose:** (If applicable)
-    * Object-Relational Mapping (ORM) libraries that simplify database interactions.  Used to manage the database in an object-oriented way.
-* **Authentication Library (e.g., Passport.js, Auth0):**
-    * Used for handling user authentication and authorization.
-* **Testing Framework (e.g., Jest, Mocha, Cypress):**
-    * **Jest/Mocha:** JavaScript testing frameworks used for writing unit and integration tests.
-    * **Cypress:** A JavaScript end-to-end testing framework.
-* **axios or fetch:**
-    * HTTP client for making requests to the server
-* **Redux/Context API (If applicable):**
-    * Used for state management in the frontend.
-* **Tailwind CSS/Bootstrap/Material UI:**
-     * CSS frameworks to help with styling
+* **React Router DOM:**
+    * Used for client-side routing, allowing navigation between different views without full page reloads.
+    * `npm install react-router-dom`
+* **Tailwind CSS:**
+    * Used for styling the application, providing a utility-first approach to CSS. It allows for rapid UI development and ensures a consistent design.
+    * `npm install -D tailwindcss postcss autoprefixer`
+    * `npx tailwindcss init -p`
+
+
+## Running Build
+
+To create a production build of the application, run:
+
+```bash
+npm run build
