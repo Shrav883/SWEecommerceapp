@@ -1,215 +1,115 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react'
+import { ShopContext } from '../context/ShopContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import { assets } from '../assets/assets';
 
 const Login = () => {
-  const [isSignIn, setIsSignIn] = useState(true); // Start with Sign In
-  const [formData, setFormData] = useState({
-    username: '', // For Sign In
-    password: '', // For Sign In
-    firstName: '', // For Sign Up
-    lastName: '', // For Sign Up
-    email: '', // For Sign Up
-    confirmPassword: '', // For Sign Up
-  });
-  const [formErrors, setFormErrors] = useState({});
-  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const [currentState, setCurrentState] = useState('Login');
+  const { token, setToken, navigate, backendUrl } = useContext(ShopContext)
 
-  const validateForm = () => {
-    let errors = {};
-    if (isSignIn) {
-      if (!formData.username.trim()) errors.username = 'Username is required';
-      if (!formData.password.trim()) errors.password = 'Password is required';
-    } else {
-      if (!formData.firstName.trim()) errors.firstName = 'First name is required';
-      if (!formData.lastName.trim()) errors.lastName = 'Last name is required';
-      if (!formData.email.trim()) errors.email = 'Email is required';
-      else if (!/^\S+@\S+\.\S+$/.test(formData.email)) errors.email = 'Invalid email format';
-      if (!formData.password.trim()) errors.password = 'Password is required';
-      if (!formData.confirmPassword.trim()) errors.confirmPassword = 'Confirm password is required';
-      else if (formData.password !== formData.confirmPassword)
-        errors.confirmPassword = 'Passwords do not match';
+  const [name, setName] = useState('')
+  const [password, setPasword] = useState('')
+  const [email, setEmail] = useState('')
+
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    try {
+      if (currentState === 'Sign Up') {
+
+        const response = await axios.post(backendUrl + '/api/user/register', { name, email, password })
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+          console.log(response.data);
+        } else {
+          toast.error(response.data.message)
+        }
+
+      } else {
+
+        const response = await axios.post(backendUrl + '/api/user/login', { email, password })
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+        } else {
+          toast.error(response.data.message)
+        }
+
+      }
+
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
     }
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Login Data:', formData); // Simulate Login - log data
-      alert(`${isSignIn ? 'Sign In' : 'Sign Up'} successful!`);
-      navigate('/'); // Navigate to Home
+  useEffect(() => {
+    if (token) {
+      navigate('/')
     }
-  };
-
-  const toggleMode = () => {
-    setIsSignIn(!isSignIn);
-    setFormErrors({}); // Clear errors when switching modes
-  };
+  }, [token])
 
   return (
-    <div className="bg-gray-100 py-12">
-      <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden md:max-w-lg">
-        <div className="md:flex">
-          <div className="w-full p-8">
-            <div className="flex justify-center mb-4">
-              <img src={assets.logo} alt="Logo" className="h-20" /> {/* Adjust size as needed */}
-            </div>
-            <h2 className="text-2xl font-semibold text-gray-700 text-center mb-4">
-              {isSignIn ? 'Sign In' : 'Sign Up'}
-            </h2>
-            <form onSubmit={handleSubmit} className="mt-4">
-              {/* Sign In Fields */}
-              {isSignIn && (
-                <div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-                      Username
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="username"
-                      type="text"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                    />
-                    {formErrors.username && (
-                      <p className="text-red-500 text-xs italic">{formErrors.username}</p>
-                    )}
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                      Password
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="password"
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                    />
-                    {formErrors.password && (
-                      <p className="text-red-500 text-xs italic">{formErrors.password}</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Sign Up Fields */}
-              {!isSignIn && (
-                <div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="firstName">
-                      First Name
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="firstName"
-                      type="text"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                    />
-                    {formErrors.firstName && (
-                      <p className="text-red-500 text-xs italic">{formErrors.firstName}</p>
-                    )}
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
-                      Last Name
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="lastName"
-                      type="text"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                    />
-                    {formErrors.lastName && (
-                      <p className="text-red-500 text-xs italic">{formErrors.lastName}</p>
-                    )}
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                      Email
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="email"
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                    />
-                    {formErrors.email && (
-                      <p className="text-red-500 text-xs italic">{formErrors.email}</p>
-                    )}
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                      Password
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="password"
-                      type="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                    />
-                    {formErrors.password && (
-                      <p className="text-red-500 text-xs italic">{formErrors.password}</p>
-                    )}
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-                      Confirm Password
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="confirmPassword"
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                    />
-                    {formErrors.confirmPassword && (
-                      <p className="text-red-500 text-xs italic">{formErrors.confirmPassword}</p>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center justify-between">
-                <button
-                  className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="submit"
-                >
-                  {isSignIn ? 'Sign In' : 'Sign Up'}
-                </button>
-                <button
-                  type="button"
-                  className="inline-block align-baseline font-bold text-sm text-red-700 hover:text-red-800"
-                  onClick={toggleMode}
-                >
-                  {isSignIn ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+    <form onSubmit={onSubmitHandler} className="flex flex-col items-center w-[90%] sm:max-w-[350px] m-auto mt-14 gap-6 p-8 bg-white rounded-lg shadow-md">
+      <div className="flex flex-col items-center gap-2 mb-4">
+        <img src={assets.logo} alt="Showtime Logo" className="h-12 mb-2" />
+        <h1 className="text-2xl font-semibold text-gray-800">{currentState === 'Login' ? 'Sign In' : 'Sign Up'}</h1>
       </div>
-    </div>
-  );
-};
+      {currentState === 'Login' ? '' : (
+        <input
+          onChange={(e) => setName(e.target.value)}
+          value={name}
+          type="text"
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          placeholder="Username"
+          required
+        />
+      )}
+      <input
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        type="email"
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+        placeholder="Email"
+        required
+      />
+      <input
+        onChange={(e) => setPasword(e.target.value)}
+        value={password}
+        type="password"
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+        placeholder="Password"
+        required
+      />
+      <div className="w-full flex justify-between text-sm mt-[-8px] text-gray-600">
+        <p className="text-gray-500 cursor-pointer hover:text-red-500 transition-colors">Forgot your password?</p>
+        {currentState === 'Login' ? (
+          <p
+            onClick={() => setCurrentState('Sign Up')}
+            className="text-red-500 cursor-pointer hover:text-red-600 transition-colors"
+          >
+            Don't have an account? Sign Up!
+          </p>
+        ) : (
+          <p
+            onClick={() => setCurrentState('Login')}
+            className="text-red-500 cursor-pointer hover:text-red-600 transition-colors"
+          >
+            Login Here
+          </p>
+        )}
+      </div>
+      <button
+        type="submit"
+        className="bg-red-600 text-white font-semibold px-6 py-2 rounded-md hover:bg-red-700 transition-colors duration-200"
+      >
+        {currentState === 'Login' ? 'Sign In' : 'Sign Up'}
+      </button>
+    </form>
+  )
+}
 
-export default Login;
+export default Login

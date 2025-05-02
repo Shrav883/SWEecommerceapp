@@ -12,6 +12,7 @@ const ShopContextProvider = (props) => {
     const [showSearch, setShowSearch] = useState(false);
     const [cartItems, setCartItems] = useState({}); // { movieId: { adult: quantity, child: quantity } }
     const [token, setToken] = useState('');
+    const [products, setProducts] = useState([]);
     const navigate = useNavigate();
 
     const adultPrice = 20;
@@ -61,31 +62,31 @@ const ShopContextProvider = (props) => {
         return totalCount;
     };
 
-      const updateQuantity = async (movieId, ticketType, quantity) => {
+    const updateQuantity = async (movieId, ticketType, quantity) => {
         if (quantity <= 0) {
-          toast.error('Quantity must be greater than zero.');
-          return;
+            toast.error('Quantity must be greater than zero.');
+            return;
         }
         let cartData = structuredClone(cartItems);
-    
+
         if (cartData[movieId]) {
-          cartData[movieId][ticketType] = quantity;
+            cartData[movieId][ticketType] = quantity;
         }
         setCartItems(cartData);
-    
+
         if (token) {
-          try {
-            await axios.post(
-              `${backendUrl}/api/cart/update`,
-              { movieId, ticketType, quantity },
-              { headers: { token } }
-            );
-          } catch (error) {
-            console.error(error);
-            toast.error(error.message);
-          }
+            try {
+                await axios.post(
+                    `${backendUrl}/api/cart/update`,
+                    { movieId, ticketType, quantity },
+                    { headers: { token } }
+                );
+            } catch (error) {
+                console.error(error);
+                toast.error(error.message);
+            }
         }
-      };
+    };
 
     const getCartAmount = () => {
         let totalAmount = 0;
@@ -99,13 +100,13 @@ const ShopContextProvider = (props) => {
     };
 
     //  No need for getProductsData in this context, but if you have movies
-      const getMoviesData = async () => {
+    const getProductsData = async () => {
         try {
-            const response = await axios.get(`${backendUrl}/api/product`); //  change the endpoint
+            const response = await axios.get(backendUrl + '/api/product/list'); //  change the endpoint
             if (response.data.success) {
-               // setMovies(response.data.movies.reverse()); // Assuming your backend returns { success: true, movies: [] }
+                setProducts(response.data.products.reverse())
             } else {
-                toast.error(response.data.message);
+                toast.error(response.data.message)
             }
         } catch (error) {
             console.error(error);
@@ -113,9 +114,13 @@ const ShopContextProvider = (props) => {
         }
     };
 
+    useEffect(()=>{
+        getProductsData();
+    },[])
+
     const getUserCart = async (token) => {
         try {
-            const response = await axios.post(`${backendUrl}/api/cart/get`, {}, { headers: { token } });
+            const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token: token } });
             if (response.data.success) {
                 setCartItems(response.data.cartData); //  adjust the response
             }
@@ -124,10 +129,6 @@ const ShopContextProvider = (props) => {
             toast.error(error.message);
         }
     };
-
-    useEffect(() => {
-       // getMoviesData();  // Fetch movies
-    }, []);
 
     useEffect(() => {
         if (!token && localStorage.getItem('token')) {
@@ -155,7 +156,7 @@ const ShopContextProvider = (props) => {
         backendUrl,
         setToken,
         token,
-        adultPrice,  // Make prices available in context
+        adultPrice,
         childPrice,
         onlineFee
     };

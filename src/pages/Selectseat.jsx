@@ -18,7 +18,7 @@ const SelectSeat = () => {
         const fetchMovieDetails = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`/api/movies/${movieId}`); //  API endpoint
+                const response = await axios.get(`/api/product/${movieId}`); //  API endpoint
                 if (response.data.success) {
                     setMovie(response.data.movie);
                 } else {
@@ -108,7 +108,7 @@ const SelectSeat = () => {
                                 const seatNumber = index + 1;
                                 const seatId = `${row}${seatNumber}`;
                                 const isSelected = selectedSeats.includes(seatId);
-                                const seatType = seatTypes[seatId];
+                                const ticketType = seatTypes[seatId]; // Changed from seatType to ticketType
                                 return (
                                     <div
                                         key={seatId}
@@ -122,7 +122,7 @@ const SelectSeat = () => {
                                          {isSelected && (
                                             <div className="absolute mt-8 bg-white dark:bg-gray-900 border rounded-md shadow-md p-1 z-10">
                                             <select
-                                                value={seatType}
+                                                value={ticketType}
                                                 onChange={(e) => handleSeatTypeChange(seatId, e.target.value)}
                                                 className="text-xs text-black dark:text-white bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500"
                                             >
