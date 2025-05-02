@@ -10,10 +10,11 @@ import SelectSeat from './pages/selectseat'
 import Contact from './pages/contact'
 import Navbar from './components/Navbar'
 import MyProfile from './pages/MyProfile'
-import { products } from './assets/assets'
+import ShopContextProvider from './context/ShopContext'
 
 const App = () => {
   return (
+    <ShopContextProvider>
     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
       <Navbar />
       <Routes>
@@ -32,6 +33,7 @@ const App = () => {
         <p>E-Commerce Project :: Shravani Kardekar</p>
       </footer>
     </div>
+    </ShopContextProvider>
 
   )
 }

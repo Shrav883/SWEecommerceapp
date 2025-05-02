@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
-import { products } from '../assets/assets';
-import Selectseat from './selectseat';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Hero from '../components/Hero';
 
 const Home = () => {
   const [filter, setFilter] = useState('All');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [movies, setMovies] = useState([]); // Changed 'products' to 'movies' for clarity
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const filteredMovies = products.filter((movie) => {
+  const fetchMovies = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/api/products`); // Adjust the endpoint if needed
+      if (response.data.success) {
+        setMovies(response.data.products); // Assuming your backend returns an array of products
+      } else {
+        console.error('Error fetching movies:', response.data.message);
+        
+      }
+    } catch (error) {
+      console.error('Network error fetching movies:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMovies();
+  }, [backendUrl]); // Fetch movies on component mount and if backendUrl changes
+
+  const filteredMovies = movies.filter((movie) => {
     if (filter === 'All') return true;
     return movie.category?.toLowerCase() === filter.toLowerCase();
   });
@@ -57,11 +76,11 @@ const Home = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {filteredMovies.map((movie) => (
           <div
-            key={movie.id}
+            key={movie._id} // Assuming your backend returns a unique '_id' field
             className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden hover:scale-105 transition-transform"
           >
             <img
-              src={movie.image[0]}
+              src={movie.image && movie.image[0]} // Adjust based on your backend's image structure
               alt={movie.name}
               className="w-full h-60 object-cover"
             />
@@ -70,15 +89,15 @@ const Home = () => {
                 {movie.name}
               </h2>
               <p className="text-sm text-gray-500 dark:text-gray-300">
-                {movie.releasedate}
+                {movie.releaseDate} {/* Adjust to the correct field from your backend */}
               </p>
               <p className="mt-1 text-sm font-medium text-red-500">
-                ${movie.ticketprice}
+                ${movie.ticketPrice} {/* Adjust to the correct field */}
               </p>
-              <Link to={`/selectseat/${movie?.id}`}>
-              <button className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-1 rounded">
-                Book Now
-              </button>
+              <Link to={`/selectseat/${movie?._id}`}> {/* Use the backend ID for navigation */}
+                <button className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-1 rounded">
+                  Book Now
+                </button>
               </Link>
             </div>
           </div>
