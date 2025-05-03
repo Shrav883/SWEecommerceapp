@@ -38,13 +38,11 @@ const Collection = ({ filterType, maxItems = 0 }) => {
                             <h2 className="text-lg font-semibold text-gray-800 dark:text-white truncate">
                                 {movie.name}
                             </h2>
-                            <p className="text-sm text-gray-500 dark:text-gray-300">
-                                {movie.releaseDate}
+                            
+                            <p className="mt-1 text-sm font-medium text-slate-100">
+                                ${movie.price}
                             </p>
-                            <p className="mt-1 text-sm font-medium text-red-500">
-                                ${movie.ticketPrice}
-                            </p>
-                            <Link to={`/selectseat/${movie?._id}`}>
+                            <Link to={`/selectseat/${movie._id}`}>
                                 <button className="mt-2 w-full bg-red-600 hover:bg-red-700 text-white py-1 rounded">
                                     Book Now
                                 </button>

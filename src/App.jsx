@@ -6,11 +6,12 @@ import About from './pages/About'
 import Cart from './pages/cart'
 import Login from './pages/login'
 import Orders from './pages/orders'
-import SelectSeat from './pages/selectseat'
+import SelectSeat from './pages/Selectseat'
 import Contact from './pages/contact'
 import Navbar from './components/Navbar'
 import MyProfile from './pages/MyProfile'
 import ShopContextProvider from './context/ShopContext'
+
 
 const App = () => {
   return (

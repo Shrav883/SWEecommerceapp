@@ -10,7 +10,7 @@ const ShopContextProvider = (props) => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [search, setSearch] = useState('');
     const [showSearch, setShowSearch] = useState(false);
-    const [cartItems, setCartItems] = useState({}); // { movieId: { adult: quantity, child: quantity } }
+    const [cartItems, setCartItems] = useState({}); // { itemId: { adult: quantity, child: quantity } }
     const [token, setToken] = useState('');
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const ShopContextProvider = (props) => {
     const childPrice = 12;
     const onlineFee = 4.99;
 
-    const addToCart = async (movieId, ticketType, quantity) => {
+    const addToCart = async (itemId, ticketType, quantity) => {
         if (quantity <= 0) {
             toast.error('Quantity must be greater than zero');
             return;
@@ -32,20 +32,19 @@ const ShopContextProvider = (props) => {
 
         let cartData = structuredClone(cartItems);
 
-        if (cartData[movieId]) {
-            cartData[movieId][ticketType] = (cartData[movieId][ticketType] || 0) + quantity;
+        if (cartData[itemId]) {
+            cartData[itemId][ticketType] = (cartData[itemId][ticketType] || 0) + quantity;
         } else {
-            cartData[movieId] = { [ticketType]: quantity };
+            cartData[itemId] = { [ticketType]: quantity };
         }
         setCartItems(cartData);
 
         if (token) {
             try {
-                await axios.post(
-                    `${backendUrl}/api/cart/add`,
-                    { movieId, ticketType, quantity },
-                    { headers: { token } }
-                );
+                const response = await axios.post(backendUrl + '/api/cart/add', { itemId, ticketType, quantity }, { headers: { token } });
+                if (!response.data.success) {
+                    toast.error(response.data.message);
+                }
             } catch (error) {
                 console.error(error);
                 toast.error(error.message);
@@ -54,33 +53,51 @@ const ShopContextProvider = (props) => {
     };
 
     const getCartCount = () => {
-        let totalCount = 0;
-        for (const movieId in cartItems) {
-            if (cartItems[movieId].adult) totalCount += cartItems[movieId].adult;
-            if (cartItems[movieId].child) totalCount += cartItems[movieId].child;
+        let count = 0;
+        for (const itemId in cartItems) {
+            for (const ticketType in cartItems[itemId]) {
+                count += cartItems[itemId][ticketType];
+            }
         }
-        return totalCount;
+        return count;
     };
 
-    const updateQuantity = async (movieId, ticketType, quantity) => {
+    const updateQuantity = async (itemId, ticketType, quantity) => {
         if (quantity <= 0) {
-            toast.error('Quantity must be greater than zero.');
+            // Remove the item from the cart
+            let cartData = structuredClone(cartItems);
+            if (cartData[itemId]) {
+                delete cartData[itemId][ticketType]
+                if (Object.keys(cartData[itemId]).length === 0) {
+                    delete cartData[itemId]
+                }
+            }
+            setCartItems(cartData);
+
+            if (token) {
+                try {
+                    const response = await axios.post(backendUrl + '/api/cart/quantity', { itemId, ticketType, quantity: 0 }, { headers: { token } });
+                    if (!response.data.success) {
+                        toast.error(response.data.message);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    toast.error(error.message);
+                }
+            }
             return;
         }
-        let cartData = structuredClone(cartItems);
 
-        if (cartData[movieId]) {
-            cartData[movieId][ticketType] = quantity;
-        }
+        let cartData = structuredClone(cartItems);
+        cartData[itemId][ticketType] = quantity;
         setCartItems(cartData);
 
         if (token) {
             try {
-                await axios.post(
-                    `${backendUrl}/api/cart/update`,
-                    { movieId, ticketType, quantity },
-                    { headers: { token } }
-                );
+                const response = await axios.post(backendUrl + '/api/cart/quantity', { itemId, ticketType, quantity }, { headers: { token } });
+                if (!response.data.success) {
+                    toast.error(response.data.message);
+                }
             } catch (error) {
                 console.error(error);
                 toast.error(error.message);
@@ -89,38 +106,38 @@ const ShopContextProvider = (props) => {
     };
 
     const getCartAmount = () => {
-        let totalAmount = 0;
-        for (const movieId in cartItems) {
-            const movieCart = cartItems[movieId];
-            const adultQuantity = movieCart.adult || 0;
-            const childQuantity = movieCart.child || 0;
-            totalAmount += adultQuantity * adultPrice + childQuantity * childPrice;
+        let amount = 0;
+        for (const itemId in cartItems) {
+            for (const ticketType in cartItems[itemId]) {
+                const quantity = cartItems[itemId][ticketType];
+                const price = ticketType === 'adult' ? adultPrice : childPrice;
+                amount += quantity * price;
+            }
         }
-        return totalAmount;
+        return amount;
     };
 
-    //  No need for getProductsData in this context, but if you have movies
     const getProductsData = async () => {
         try {
-            const response = await axios.get(backendUrl + '/api/product/list'); //  change the endpoint
+            const response = await axios.get(backendUrl + '/api/product/list');
             if (response.data.success) {
-                setProducts(response.data.products.reverse())
-            } else {
-                toast.error(response.data.message)
+                setProducts(response.data.products);
+                return response.data.products; // Return the products data
             }
         } catch (error) {
             console.error(error);
             toast.error(error.message);
+            return [];
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         getProductsData();
-    },[])
+    }, []);
 
     const getUserCart = async (token) => {
         try {
-            const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token: token } });
+            const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token } });
             if (response.data.success) {
                 setCartItems(response.data.cartData); //  adjust the response
             }
@@ -156,9 +173,11 @@ const ShopContextProvider = (props) => {
         backendUrl,
         setToken,
         token,
-        adultPrice,
+        adultPrice,  // Make prices available in context
         childPrice,
-        onlineFee
+        onlineFee,
+        getProductsData,
+        products
     };
 
     return (
