@@ -10,7 +10,8 @@ import SelectSeat from './pages/Selectseat'
 import Contact from './pages/contact'
 import Navbar from './components/Navbar'
 import MyProfile from './pages/MyProfile'
-import ShopContextProvider from './context/ShopContext'
+import ShopContextProvider from './context/Shopcontext'
+import PlaceOrder from './pages/PlaceOrder'
 
 
 const App = () => {
@@ -24,10 +25,11 @@ const App = () => {
         <Route path='/login' element={<Login/>} />
         <Route path='/movie' element={<Movie/>} />
         <Route path='/orders' element={<Orders/>} />
-        <Route path='/selectseat/:id' element={<SelectSeat/>} />
+        <Route path='/selectseat/:userid' element={<SelectSeat/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/myprofile' element={<MyProfile/>} />
         <Route path='/about' element={<About />} />
+        <Route path='/placeorder' element={<PlaceOrder />} />
     
       </Routes>
       <footer className="text-center mt-12 py-4 border-t">

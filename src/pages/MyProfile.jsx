@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 const MyProfile = () => {
-  // Assuming you have a currentUser object
   const currentUser = {
     name: 'John Doe',
     email: 'john.doe@example.com',

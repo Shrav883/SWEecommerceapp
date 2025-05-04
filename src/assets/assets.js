@@ -17,6 +17,8 @@ import cart_icon from './cart.png'
 import menu_icon from './menu.png'
 import thunderbolts from './thunderbolts.png'
 import dropdown_icon from './dropdown.png'
+import razorpay_logo from './razorpay_logo.png'
+import stripe_logo from './stripe_logo.png'
 
 export const assets = 
 {
@@ -42,7 +44,9 @@ export const icons =
   profile_icon,
   cart_icon,
   menu_icon,
-  dropdown_icon
+  dropdown_icon,
+  razorpay_logo,
+  stripe_logo
 }
 
 export const products = [

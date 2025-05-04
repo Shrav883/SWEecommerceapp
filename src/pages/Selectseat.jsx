@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShopContext } from '../context/ShopContext';
+import { ShopContext } from '../context/Shopcontext';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
 
 const SelectSeat = () => {
-    const { productId } = useParams(); // Get movie ID from URL
+    const { userId } = useParams(); // Get movie ID from URL
     const { addToCart, adultPrice, childPrice, currency, products } = useContext(ShopContext); // Get products from context
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [seatTypes, setSeatTypes] = useState({});
@@ -18,18 +18,18 @@ const SelectSeat = () => {
     // Fetch movie details from context
     useEffect(() => {
         setLoading(true);
-        const foundMovie = products.find(item => item._Id === productId); // Assuming 'id' is the unique identifier
+        const foundMovie = products.find(item => item._Id === userId); // Assuming 'id' is the unique identifier
         if (foundMovie) {
             setMovie(foundMovie);
             setLoading(false);
         } else {
             toast.error("Movie not found.");
-            navigate('/movie'); // Redirect to collection page
+            navigate('/movie'); // Redirect to movie collection page
             setLoading(false);
         }
-    }, [productId, products, navigate]);
+    }, [userId, products, navigate]);
 
-    // Dummy seat data (replace with actual data if needed)
+    // Dummy seat data
     const rows = ['A', 'B', 'C', 'D', 'E'];
     const seatsPerRow = 10;
 
@@ -64,7 +64,7 @@ const SelectSeat = () => {
 
         for (const ticketType in ticketCounts) {
             const quantity = ticketCounts[ticketType];
-            addToCart(productId, ticketType, quantity);
+            addToCart(userId, ticketType, quantity);
         }
 
         navigate('/cart');
@@ -145,7 +145,7 @@ const SelectSeat = () => {
                                         {seatNumber}
                                         </div>
                                         {isSelected && isHovered && (
-                                            <div ref={dropdownRef} style={{transform:'translateY(2px)'}} className="absolute left-1/2 -translate-x-1/2 top-full mt-1 bg-white dark:bg-gray-900 border rounded-md shadow-md p-1 z-10">
+                                            <div ref={dropdownRef} style={{transform:'translateY(0.5px)'}} className="absolute -translate-x-1/2 top-full mt-1 bg-white dark:bg-gray-900 border rounded-md shadow-md p-1 z-10">
                                                 <select
                                                     value={ticketType}
                                                     onChange={(e) => handleSeatTypeChange(seatId, e.target.value)}

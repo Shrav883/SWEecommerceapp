@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext';
+import { ShopContext } from '../context/Shopcontext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Cart = () => {
@@ -31,11 +31,8 @@ const Cart = () => {
     }, [cartItems, adultPrice, childPrice]);
 
     const handleProceedToCheckout = () => {
-        // Implement your checkout logic here.  You might want to calculate the final
-        // order details (including online fee and tax) and then proceed to a
-        // payment gateway or order confirmation page.
         console.log('Proceeding to checkout with cart data:', cartData);
-        navigate('/checkout'); //  Adjust the route as necessary
+        navigate('/placeorder'); //  Adjust the route as necessary
     };
 
     if (cartData.length === 0) {
